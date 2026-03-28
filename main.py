@@ -11,6 +11,7 @@ def main():
         return
 
     face_cascade = cv2.CascadeClassifier(CASCADE_PATH)
+    blur_faces = False
 
     while True:
         ret, frame = cap.read()
@@ -24,10 +25,16 @@ def main():
         )
 
         for (x, y, w, h) in faces:
+            if blur_faces:
+                face_roi = frame[y : y + h, x : x + w]
+                # Use an odd kernel that scales with face size for a consistent blur effect.
+                kernel = max(15, ((min(w, h) // 3) | 1))
+                blurred_face = cv2.GaussianBlur(face_roi, (kernel, kernel), 0)
+                frame[y : y + h, x : x + w] = blurred_face
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)  # Red square
 
         # Add instruction text at the bottom left of the window
-        text = "Press Esc to exit..."
+        text = "Space: toggle blur | Esc/q: exit"
         font = cv2.FONT_HERSHEY_PLAIN  # Sans-serif font
         font_scale = 2.0  # Larger font size
         thickness = 3     # Increased thickness
@@ -40,7 +47,9 @@ def main():
 
         cv2.imshow("Face Tracker", frame)
         key = cv2.waitKey(1) & 0xFF
-        if key == ord("q") or key == 27:  # 27 is the Esc key
+        if key == ord(" "):
+            blur_faces = not blur_faces
+        elif key == ord("q") or key == 27:  # 27 is the Esc key
             break
 
     cap.release()
