@@ -1,6 +1,6 @@
 # Face Tracker
 
-This project is a small Python/OpenCV application that opens your webcam, detects faces, and draws tracking boxes in real time.
+This project is a small Python/OpenCV application that opens your webcam, detects faces, and draws tracking boxes in real time. Press `Space` to cycle detected faces through `normal`, `blur`, `negative`, and `grayscale` display modes.
 
 ## Requirements
 
@@ -51,7 +51,8 @@ uv run python -m py_compile main.py
 Manual verification should confirm:
 
 - the webcam opens successfully
-- faces are outlined on screen
+- faces are outlined on screen in every mode
+- pressing `Space` cycles face rendering through normal, blur, negative, and grayscale
 - the app exits cleanly with `q` or `Esc`
 
 ## Notes
